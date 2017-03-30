@@ -150,7 +150,11 @@ class supervisord(
   }
 
   # Handle deprecated $environment variable
-  if $environment { notify {'[supervisord] *** DEPRECATED WARNING ***: $global_environment has replaced $environment':}}
+  if $environment {
+    notify { "${caller_module_name}_supervisord_deprecation":
+      message => '[supervisord] *** DEPRECATED WARNING ***: $global_environment has replaced $environment'
+    }
+  }
   $_global_environment = $global_environment ? {
     undef   => $environment,
     default => $global_environment
